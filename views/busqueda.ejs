@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <!-- CONFIGURACION DE METADATOS Y FUENTES -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+    <title>Buscador de Articulos - KADENAS BIKES</title>
+    <!-- TAILWINDCSS PARA ESTILOS RAPIDOS Y RESPONSIVOS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/js/tailwindConfig.js"></script>
+    <!-- FUENTES DE GOOGLE FONTS -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Share+Tech&display=swap"
+      rel="stylesheet"
+    />
+    <!-- FEATHER ICONS PARA ICONOS SVG -->
+    <script src="https://unpkg.com/feather-icons"></script>
+  </head>
+  <body
+    class="bg-white dark:bg-[#18181b] text-gray-800 dark:text-gray-100 font-poppins pt-20 md:pt-24"
+  >
+    <%- include('partials/header1') %>
+
+    <!-- CONTENIDO PRINCIPAL DE LA PAGINA -->
+    <main
+      class="w-full min-h-screen box-border overflow-x-hidden px-2 sm:px-4 md:px-6 py-8"
+    >
+      <!-- TITULO PRINCIPAL DEL BUSCADOR -->
+      <h1
+        class="text-3xl sm:text-4xl font-bold mb-8 text-center font-oswald dark:text-white"
+      >
+        Bienvenido <%= user.nombre_usuario %>
+      </h1>
+
+      <!-- SECCION DE FILTROS Y BUSQUEDA -->
+      <div
+        class="w-full flex flex-col sm:flex-row justify-between items-center mb-8 gap-4 md:gap-6 px-2 sm:px-0"
+      >
+        <!-- FILTROS POR TIPO DE BICICLETA -->
+        <div
+          class="flex flex-wrap gap-2 items-center bg-gray-50 dark:bg-[#23272f] p-3 rounded-lg shadow border dark:border-gray-700 w-full sm:w-auto"
+        >
+          <!-- ETIQUETA DE TIPOS DE BICICLETAS -->
+          <span
+            class="text-sm sm:text-base font-semibold mr-2 dark:text-gray-200"
+            >Tipos:</span
+          >
+          <!-- BOTON PARA MOSTRAR TODAS LAS BICICLETAS -->
+          <a
+            href="/busqueda?category=todos"
+            class="text-orange-600 hover:underline focus:font-bold px-2 py-1 text-xs sm:text-sm"
+          >
+            Todas
+          </a>
+          <!-- BOTON PARA FILTRAR POR GRAVEL -->
+          <a
+            href="/busqueda?category=bicicletas"
+            class="text-orange-600 hover:underline focus:font-bold px-2 py-1 text-xs sm:text-sm"
+          >
+            Bicicletas
+          </a>
+          <!-- BOTON PARA FILTRAR POR MONTANA -->
+          <a
+            href="/busqueda?category=accesorios"
+            class="text-orange-600 hover:underline focus:font-bold px-2 py-1 text-xs sm:text-sm"
+          >
+            Accesorios
+          </a>
+          <!-- BOTON PARA FILTRAR POR URBANA -->
+          <a
+            href="/busqueda?category=refacciones"
+            class="text-orange-600 hover:underline focus:font-bold px-2 py-1 text-xs sm:text-sm"
+          >
+            Refacciones
+          </a>
+          <!-- BOTON PARA FILTRAR POR ELECTRICA -->
+          <a
+            href="/busqueda?category=otros"
+            class="text-orange-600 hover:underline focus:font-bold px-2 py-1 text-xs sm:text-sm"
+          >
+            Otros
+          </a>
+        </div>
+        <!-- INPUT DE BUSQUEDA DE ARTICULOS -->
+        <div class="relative w-full sm:w-auto sm:max-w-xs">
+          <!-- CAMPO DE TEXTO PARA BUSCAR ARTICULOS POR NOMBRE O TIPO -->
+          <input
+            id="input-busqueda"
+            type="text"
+            placeholder="Buscar articulo..."
+            class="w-full p-3 pr-10 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-orange-500 dark:bg-[#23272f] dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 transition"
+          />
+          <!-- BOTON DE BUSQUEDA -->
+          <button
+            id="btn-buscar"
+            type="button"
+            class="absolute right-2 top-1/2 -translate-y-1/2 bg-orange-500 hover:bg-orange-600 text-white rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-orange-400 transition"
+          >
+            <i data-feather="search" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- SECCION DE CARRUSEL DE BICICLETAS DESTACADAS -->
+      <section
+        class="py-10 sm:py-12 md:py-16 bg-orange-500 dark:bg-orange-600 text-white w-full max-w-full overflow-x-hidden"
+      >
+        <div class="max-w-6xl mx-auto">
+          <h2
+            class="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 text-center font-oswald w-full"
+          >
+            Productos Destacados
+          </h2>
+          <!-- CONTENEDOR DEL CARRUSEL -->
+          <div
+            class="carousel-container relative overflow-hidden rounded-lg shadow-xl w-full max-w-full"
+          >
+            <div
+              class="carousel-inner relative h-72 sm:h-96 md:h-[550px] w-full max-w-full"
+              id="carouselTrackDestacadas"
+            >
+              <!-- LAS TARJETAS DEL CARRUSEL SE GENERAN CON JS -->
+            </div>
+            <!-- BOTONES DE NAVEGACION DEL CARRUSEL -->
+            <button
+              class="carousel-prev-destacadas absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 sm:p-3 rounded-full hover:bg-black/70 transition z-10"
+            >
+              <i data-feather="chevron-left" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+            </button>
+            <button
+              class="carousel-next-destacadas absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 sm:p-3 rounded-full hover:bg-black/70 transition z-10"
+            >
+              <i data-feather="chevron-right" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCION DE CATALOGO DE BICICLETAS -->
+      <section class="w-full py-10">
+        <h2
+          class="text-2xl sm:text-3xl font-bold mb-6 text-center font-oswald dark:text-white"
+        >
+          Catalogo de Productos
+        </h2>
+        <div
+          id="catalogo-bicicletas"
+          class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 w-full"
+        >
+          <% if (!(productos && productos.length > 0)) { %>
+          <div
+            class="col-span-full text-center text-gray-500 dark:text-gray-400 py-10"
+          >
+            No hay productos para mostrar.
+          </div>
+          <% } %>
+        </div>
+      </section>
+
+      <!-- SECCION DE RESULTADOS DE BUSQUEDA (OPCIONAL) -->
+      <div id="resultados-busqueda" class="space-y-4"></div>
+    </main>
+
+    <!-- Modal Custom -->
+    <div
+      id="customModal"
+      class="fixed inset-0 z-50 flex items-center justify-center hidden"
+    >
+      <!-- Overlay -->
+      <div class="absolute inset-0 bg-black opacity-50 dark:opacity-70"></div>
+      <!-- Modal container -->
+      <div
+        class="relative bg-white dark:bg-[#18181b] text-gray-800 dark:text-gray-100 rounded-lg shadow-lg p-6 max-w-md w-full mx-4"
+      >
+        <!-- Título del modal -->
+        <h2
+          id="modalTitle"
+          class="text-2xl font-bold mb-4 text-orange-600 font-oswald"
+        ></h2>
+        <!-- Mensaje del modal -->
+        <p id="modalMessage" class="mb-6 text-base"></p>
+        <!-- Botón para cerrar -->
+        <button
+          id="modalClose"
+          class="w-full bg-orange-600 hover:bg-orange-700 dark:bg-orange-600 dark:hover:bg-orange-700 text-white font-semibold py-3 rounded-lg transition"
+        >
+          ACEPTAR
+        </button>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <%- include('partials/footer') %>
+
+    <!--AUNQUE GENERE UN ERROR SE RENDERIZA CORRECTAMENTE-->
+    <script>
+      window.productos = <%- JSON.stringify(productos) %>;
+    </script>
+    <script src="/js/busquedaScript.js"></script>
+    <script src="/js/colorScheme.js"></script>
+  </body>
+</html>

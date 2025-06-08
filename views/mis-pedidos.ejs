@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es" id="html-root">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mis Pedidos | Kadenas Bikes</title>
+    <meta
+      name="description"
+      content="Consulta y gestiona tus pedidos en Kadenas Bikes."
+    />
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/js/tailwindConfig.js"></script>
+    <style>
+      html,
+      body {
+        font-family: "Poppins", "Oswald", Arial, sans-serif;
+      }
+      .font-oswald {
+        font-family: "Oswald", Arial, sans-serif;
+      }
+      .font-poppins {
+        font-family: "Poppins", Arial, sans-serif;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-white dark:bg-[#18181b] text-gray-800 dark:text-gray-100 font-poppins pt-20 md:pt-24 min-h-screen flex flex-col"
+  >
+    <%- include('partials/header1') %>
+    <main class="flex-grow w-full box-border px-2 sm:px-4 md:px-6 py-8">
+      <div class="container mx-auto">
+        <h1
+          class="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-10 font-oswald text-gray-900 dark:text-white"
+        >
+          Mis Pedidos
+        </h1>
+        <section id="orders-list" class="flex flex-col gap-6">
+          <% if (pedidos && pedidos.length > 0) { %> <%
+          pedidos.forEach(function(pedido) { %>
+          <article
+            class="bg-white dark:bg-[#23272f] rounded-lg shadow-lg overflow-hidden flex flex-col md:flex-row items-stretch transition-transform duration-300 hover:scale-[1.01] border border-gray-100 dark:border-gray-800"
+          >
+            <div
+              class="p-4 flex-grow flex flex-col justify-between border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700"
+            >
+              <div
+                class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2"
+              >
+                <div class="flex flex-col md:flex-row md:items-center gap-2">
+                    <%
+                    const clasesEstado = {
+                      pendiente: 'bg-orange-100 dark:bg-orange-900 text-orange-600 dark:text-orange-300',
+                      cancelado: 'bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-300',
+                      finalizado: 'bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300',
+                      reembolsado: 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300',
+                      enviado: 'bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300',
+                    };
+                  
+                    const estado = (pedido.estado || '').toLowerCase();
+                    const estadoClases = clasesEstado[estado] || 'bg-gray-100 text-gray-600';
+                  %>
+                  <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider <%= estadoClases %>">
+                    <%= pedido.estado %>
+                  </span>
+                  
+
+                  <span class="text-gray-400 text-xs"
+                    >Pedido #<%= pedido.id %></span
+                  >
+                </div>
+                <span class="text-gray-500 dark:text-gray-400 text-xs">
+                  <i data-feather="clock" class="inline w-4 h-4 mr-1"></i>
+                  <%= pedido.creado_en %>
+                </span>
+              </div>
+              <div class="mb-2">
+                <h2
+                  class="font-oswald text-lg font-bold text-orange-600 dark:text-orange-400 mb-1"
+                >
+                  Datos del Comprador
+                </h2>
+                <div class="text-sm text-gray-700 dark:text-gray-200">
+                  <span class="block"
+                    ><b>Nombre:</b> <%= pedido.datos_comprador?.nombre %></span
+                  >
+                  <span class="block"
+                    ><b>Teléfono:</b> <%= pedido.datos_comprador?.telefono
+                    %></span
+                  >
+                  <span class="block"
+                    ><b>Email:</b> <%= pedido.datos_comprador?.email %></span
+                  >
+                </div>
+              </div>
+              <div class="mb-2">
+                <h2
+                  class="font-oswald text-lg font-bold text-orange-600 dark:text-orange-400 mb-1"
+                >
+                  Envío
+                </h2>
+                <div class="text-sm text-gray-700 dark:text-gray-200">
+                  <span class="block"
+                    ><b>Dirección:</b> <%= pedido.direccion_envio?.calle %>, <%=
+                    pedido.direccion_envio?.colonia %>, <%=
+                    pedido.direccion_envio?.ciudad %>, CP <%=
+                    pedido.direccion_envio?.cp %></span
+                  >
+                  <% if (pedido.direccion_envio?.referencias) { %>
+                  <span class="block"
+                    ><b>Referencias:</b> <%= pedido.direccion_envio.referencias
+                    %></span
+                  >
+                  <% } %>
+                  <span class="block"
+                    ><b>Tipo de Envío:</b> <%= pedido.envio || pedido.tipo_envio
+                    %></span
+                  >
+                  <% if (pedido.notas || pedido.instrucciones_envio) { %>
+                  <span class="block"
+                    ><b>Notas:</b> <%= pedido.notas ||
+                    pedido.instrucciones_envio %></span
+                  >
+                  <% } %>
+                </div>
+              </div>
+              <div class="mb-2">
+                <h2
+                  class="font-oswald text-lg font-bold text-orange-600 dark:text-orange-400 mb-1"
+                >
+                  Productos
+                </h2>
+                <ul
+                  class="list-disc list-inside text-sm text-gray-700 dark:text-gray-200 ml-2"
+                >
+                  <% (pedido.items || []).forEach(function(item) { %>
+                  <li>
+                    <span class="font-semibold"><%= item.nombre %></span>
+                    <% if(item.cantidad){ %> x <%= item.cantidad %><% } %>
+                  </li>
+                  <% }) %>
+                </ul>
+              </div>
+              <div
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-4"
+              >
+                <span
+                  class="text-lg font-bold text-orange-600 dark:text-orange-400"
+                  >Total: $<%= pedido.total.toFixed ? pedido.total.toFixed(2) :
+                  pedido.total %></span
+                >
+                <div class="flex flex-col sm:flex-row gap-2 mt-2">
+                  <% if(pedido.estado === "pendiente"){ %>
+                  <button
+                    class="w-full sm:w-auto bg-red-600 dark:bg-red-500 hover:bg-red-700 dark:hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center text-sm"
+                    data-action="cancelar"
+                    data-pedido-id="<%= pedido.id %>"
+                  >
+                    <i data-feather="x-circle" class="w-4 h-4 mr-2"></i>
+                    Cancelar Pedido
+                  </button>
+                  <% } else if(pedido.estado === "finalizado") { %>
+                  <button
+                    class="w-full sm:w-auto bg-orange-600 dark:bg-orange-500 hover:bg-orange-700 dark:hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center text-sm"
+                    data-action="devolver"
+                    data-pedido-id="<%= pedido.id %>"
+                  >
+                    <i data-feather="refresh-cw" class="w-4 h-4 mr-2"></i>
+                    Solicitar Devolución
+                  </button>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          </article>
+          <% }); %> <% } else { %>
+          <div
+            class="col-span-full text-center text-gray-500 dark:text-gray-400 py-12"
+          >
+            <p class="text-lg mb-4">Aún no tienes pedidos realizados.</p>
+            <a
+              href="/busqueda"
+              class="inline-block bg-orange-600 dark:bg-orange-500 hover:bg-orange-700 dark:hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-md transition-colors duration-200"
+            >
+              Explorar productos
+            </a>
+          </div>
+          <% } %>
+        </section>
+      </div>
+    </main>
+    <%- include('partials/footer') %>
+    <div
+      id="customModal"
+      class="fixed inset-0 z-50 flex items-center justify-center hidden"
+    >
+      <div class="absolute inset-0 bg-black opacity-50 dark:opacity-70"></div>
+      <div
+        class="relative bg-white dark:bg-[#18181b] text-gray-800 dark:text-gray-100 rounded-lg shadow-lg p-6 max-w-md w-full mx-4"
+      >
+        <h2
+          id="modalTitle"
+          class="text-2xl font-bold mb-4 text-orange-600 font-oswald"
+        ></h2>
+        <p id="modalMessage" class="mb-6 text-base"></p>
+        <div class="flex gap-2">
+          <button
+            id="modalClose"
+            class="w-full bg-orange-600 hover:bg-orange-700 dark:bg-orange-600 dark:hover:bg-orange-700 text-white font-semibold py-3 rounded-lg transition"
+          >
+            ACEPTAR
+          </button>
+          <button
+            id="modalCancel"
+            class="w-full bg-orange-600 hover:bg-orange-700 dark:bg-orange-600 dark:hover:bg-orange-700 text-white font-semibold py-3 rounded-lg transition"
+          >
+            CANCELAR
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Modal de Devolución -->
+    <div id="devolucionModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+      <div class="absolute inset-0 bg-black opacity-50 dark:opacity-70"></div>
+      <div class="relative bg-white dark:bg-[#18181b] text-gray-800 dark:text-gray-100 rounded-lg shadow-lg p-6 max-w-md w-full mx-4">
+        <h2 class="text-2xl font-bold mb-4 text-orange-600 font-oswald">Solicitar Devolución</h2>
+        <form id="devolucionForm" class="space-y-4">
+          <div>
+            <label for="devolucionMotivo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Motivo de la Devolución</label>
+            <textarea 
+              id="devolucionMotivo" 
+              rows="4" 
+              class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-[#23272f] dark:text-white focus:ring-orange-500 focus:border-orange-500"
+              required
+              placeholder="Por favor, describe el motivo de tu devolución..."
+            ></textarea>
+          </div>
+          <input type="hidden" id="devolucionPedidoId">
+          <div class="flex gap-2 mt-6">
+            <button
+              type="submit"
+              class="flex-1 bg-orange-600 hover:bg-orange-700 dark:bg-orange-600 dark:hover:bg-orange-700 text-white font-semibold py-3 rounded-lg transition"
+            >
+              Enviar Solicitud
+            </button>
+            <button
+              type="button"
+              id="cancelarDevolucionBtn"
+              class="flex-1 bg-gray-600 hover:bg-gray-700 dark:bg-gray-600 dark:hover:bg-gray-700 text-white font-semibold py-3 rounded-lg transition"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script src="/js/colorScheme.js"></script>
+    <script src="/js/mis-pedidosScript.js"></script>
+  </body>
+</html>

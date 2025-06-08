@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Reporte de Ventas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body {
+        font-family: "Inter", "Oswald", Arial, sans-serif;
+      }
+      .sticky-head th {
+        position: sticky;
+        top: 0;
+        background: #f3f4f6;
+        z-index: 2;
+      }
+      .badge {
+        @apply px-2 py-1 rounded-full text-xs font-semibold;
+      }
+      .product-photo {
+        width: 48px;
+        height: 48px;
+        object-fit: cover;
+        border-radius: 0.5rem;
+        border: 2px solid #e5e7eb;
+      }
+    </style>
+  </head>
+  <body class="bg-gradient-to-tr from-purple-50 via-white to-blue-100 min-h-screen">
+    <!-- Encabezado -->
+    <div class="max-w-4xl mx-auto rounded-2xl shadow-xl overflow-hidden mb-8">
+      <div class="bg-gradient-to-r from-purple-600 via-blue-600 to-purple-400 p-8 flex flex-col sm:flex-row items-center gap-6">
+        <img
+          src="<%= logoBase64 %>"
+          alt="Logo"
+          class="w-20 h-20 rounded-full border-4 border-white shadow-lg bg-white"
+        />
+        <div class="flex-1 text-center sm:text-left">
+          <h1 class="text-4xl font-extrabold font-oswald text-white tracking-wide mb-1">
+            Reporte de Ventas
+          </h1>
+          <p class="text-purple-100 text-lg font-medium">
+            Análisis de ventas y estadísticas comerciales
+          </p>
+        </div>
+        <div class="hidden sm:block text-white text-right">
+          <span class="block text-xs opacity-70">Generado:</span>
+          <span class="font-bold text-sm"><%= new Date().toLocaleString('es-MX') %></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto">
+      <!-- Tarjetas resumen -->
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-xl shadow flex flex-col items-center py-6 px-4 border-t-4 border-purple-500">
+          <div class="bg-purple-100 text-purple-600 rounded-full p-3 mb-2">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div class="text-2xl font-bold">$<%= totalVentas.toFixed(2) %></div>
+          <div class="text-gray-500">Total Ventas</div>
+        </div>
+        <div class="bg-white rounded-xl shadow flex flex-col items-center py-6 px-4 border-t-4 border-green-500">
+          <div class="bg-green-100 text-green-600 rounded-full p-3 mb-2">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div class="text-2xl font-bold"><%= pedidosFinalizados %></div>
+          <div class="text-gray-500">Pedidos Finalizados</div>
+        </div>
+        <div class="bg-white rounded-xl shadow flex flex-col items-center py-6 px-4 border-t-4 border-blue-500">
+          <div class="bg-blue-100 text-blue-600 rounded-full p-3 mb-2">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+          </div>
+          <div class="text-2xl font-bold"><%= totalProductos %></div>
+          <div class="text-gray-500">Productos Vendidos</div>
+        </div>
+        <div class="bg-white rounded-xl shadow flex flex-col items-center py-6 px-4 border-t-4 border-yellow-500">
+          <div class="bg-yellow-100 text-yellow-600 rounded-full p-3 mb-2">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+          </div>
+          <div class="text-2xl font-bold"><%= clientesUnicos %></div>
+          <div class="text-gray-500">Clientes Únicos</div>
+        </div>
+      </div>
+
+      <!-- Gráficos -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        <!-- Ventas últimos 7 días -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 border border-purple-100">
+          <h2 class="font-semibold mb-3 text-purple-700 tracking-wide border-b border-purple-100 pb-2 text-center">
+            Ventas Últimos 7 Días
+          </h2>
+          <div class="chart-container">
+            <canvas id="graficoVentasDias"></canvas>
+          </div>
+        </div>
+
+        <!-- Distribución estados -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 border border-green-100">
+          <h2 class="font-semibold mb-3 text-green-700 tracking-wide border-b border-green-100 pb-2 text-center">
+            Distribución de Estados
+          </h2>
+          <div class="chart-container">
+            <canvas id="graficoEstados"></canvas>
+          </div>
+        </div>
+
+        <!-- Productos más vendidos -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 border border-blue-100">
+          <h2 class="font-semibold mb-3 text-blue-700 tracking-wide border-b border-blue-100 pb-2 text-center">
+            Productos Más Vendidos
+          </h2>
+          <div class="chart-container">
+            <canvas id="graficoProductos"></canvas>
+          </div>
+        </div>
+
+        <!-- Ganancias últimos 7 días -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 border border-yellow-100">
+          <h2 class="font-semibold mb-3 text-yellow-700 tracking-wide border-b border-yellow-100 pb-2 text-center">
+            Ganancias Últimos 7 Días
+          </h2>
+          <div class="chart-container">
+            <canvas id="graficoGanancias"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla de pedidos -->
+      <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-10">
+        <div class="p-6 border-b border-gray-200">
+          <h2 class="text-2xl font-semibold text-gray-800 flex items-center gap-2">
+            <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            Últimos 50 Pedidos
+          </h2>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead>
+              <tr>
+                <th class="sticky-head py-3 px-4 text-left">ID</th>
+                <th class="sticky-head py-3 px-4 text-left">Cliente</th>
+                <th class="sticky-head py-3 px-4 text-left">Productos</th>
+                <th class="sticky-head py-3 px-4 text-center">Total</th>
+                <th class="sticky-head py-3 px-4 text-center">Estado</th>
+                <th class="sticky-head py-3 px-4 text-center">Fecha</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <% pedidos.forEach(pedido => { %>
+                <tr class="hover:bg-purple-50">
+                  <td class="py-3 px-4 text-gray-600">#<%= pedido.id %></td>
+                  <td class="py-3 px-4">
+                    <div class="font-medium text-gray-900"><%= pedido.datos_comprador.nombre %></div>
+                    <div class="text-sm text-gray-500"><%= pedido.datos_comprador.email %></div>
+                  </td>
+                  <td class="py-3 px-4">
+                    <div class="flex flex-col gap-1">
+                      <% pedido.items.forEach(item => { %>
+                        <div class="text-sm text-gray-700"><%= item.nombre %></div>
+                      <% }) %>
+                    </div>
+                  </td>
+                  <td class="py-3 px-4 text-center font-bold text-purple-600">
+                    $<%= pedido.total.toFixed(2) %>
+                  </td>
+                  <td class="py-3 px-4 text-center">
+                    <% const estadoColors = {
+                      'pendiente': 'bg-yellow-100 text-yellow-800',
+                      'enviado': 'bg-blue-100 text-blue-800',
+                      'finalizado': 'bg-green-100 text-green-800',
+                      'cancelado': 'bg-red-100 text-red-800',
+                      'devuelto': 'bg-gray-100 text-gray-800',
+                      'en_devolucion': 'bg-orange-100 text-orange-800'
+                    } %>
+                    <span class="badge <%= estadoColors[pedido.estado] %>">
+                      <%= pedido.estado.charAt(0).toUpperCase() + pedido.estado.slice(1) %>
+                    </span>
+                  </td>
+                  <td class="py-3 px-4 text-center text-sm text-gray-500">
+                    <%= new Date(pedido.creado_en).toLocaleDateString('es-MX') %>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer class="text-center text-gray-400 text-xs py-6 border-t border-gray-200">
+        Reporte generado automáticamente por Kadenas Bikes &copy; <%= new Date().getFullYear() %>. 
+        Fecha y hora: <%= new Date().toLocaleString('es-MX') %>
+      </footer>
+    </div>
+
+    <script>
+      // Datos inyectados desde el backend
+      const ventasDias = <%- JSON.stringify(ventasDias) %>;
+      const estadosPedidos = <%- JSON.stringify(estadosPedidos) %>;
+      const productosMasVendidos = <%- JSON.stringify(productosMasVendidos) %>;
+      const gananciasDias = <%- JSON.stringify(gananciasDias) %>;
+
+      // Gráfico de ventas últimos 7 días
+      new Chart(document.getElementById('graficoVentasDias'), {
+        type: 'bar',
+        data: {
+          labels: ventasDias.labels,
+          datasets: [{
+            label: 'Ventas',
+            data: ventasDias.data,
+            backgroundColor: '#8b5cf6',
+            borderRadius: 6,
+            barPercentage: 0.7
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+
+      // Gráfico de distribución de estados
+      new Chart(document.getElementById('graficoEstados'), {
+        type: 'doughnut',
+        data: {
+          labels: Object.keys(estadosPedidos),
+          datasets: [{
+            data: Object.values(estadosPedidos),
+            backgroundColor: ['#fbbf24', '#60a5fa', '#34d399', '#f87171', '#9ca3af', '#fb923c']
+          }]
+        },
+        options: {
+          plugins: { legend: { position: 'bottom' } }
+        }
+      });
+
+      // Gráfico de productos más vendidos
+      new Chart(document.getElementById('graficoProductos'), {
+        type: 'bar',
+        data: {
+          labels: productosMasVendidos.map(p => p.nombre),
+          datasets: [{
+            label: 'Unidades Vendidas',
+            data: productosMasVendidos.map(p => p.cantidad),
+            backgroundColor: '#3b82f6',
+            borderRadius: 6,
+            barPercentage: 0.7
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+
+      // Gráfico de ganancias últimos 7 días
+      new Chart(document.getElementById('graficoGanancias'), {
+        type: 'line',
+        data: {
+          labels: gananciasDias.labels,
+          datasets: [{
+            label: 'Ganancias',
+            data: gananciasDias.data,
+            fill: true,
+            backgroundColor: 'rgba(251, 191, 36, 0.15)',
+            borderColor: '#fbbf24',
+            tension: 0.3
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+    </script>
+  </body>
+</html>

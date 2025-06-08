@@ -1,0 +1,29 @@
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+.dark ::-webkit-scrollbar-track {
+  background: #2d3748; /* dark:bg-gray-700 */
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #4a5568; /* dark:bg-gray-500 */
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #2c3e50; /* A bit darker */
+}
+.sidebar-icon {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+}

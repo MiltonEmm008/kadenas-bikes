@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es" id="html-root">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= producto.nombre %> | Kadenas Bikes</title>
+    <meta
+      name="description"
+      content="Compra la bicicleta de carretera SAVA F20 de fibra de carbono con SHIMANO 105 R7120. Envío gratis y 12 meses sin intereses."
+    />
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+    <!-- Fuentes -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <!-- Tailwind CSS y config para modo oscuro -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/js/tailwindConfig.js"></script>
+    <style>
+      html,
+      body {
+        font-family: "Poppins", "Oswald", Arial, sans-serif;
+      }
+      .font-oswald {
+        font-family: "Oswald", Arial, sans-serif;
+      }
+      .font-poppins {
+        font-family: "Poppins", Arial, sans-serif;
+      }
+      /* Solo lo necesario fuera de Tailwind */
+      @media (min-width: 1024px) {
+        .carrusel-item {
+          width: calc(25% - 16px) !important;
+          flex: 0 0 auto;
+        }
+      }
+      .carrusel-track {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+        gap: 16px;
+      }
+      .carrusel-container {
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-white dark:bg-[#18181b] text-gray-800 dark:text-gray-100 font-poppins pt-20 md:pt-24"
+  >
+    <%- include('partials/header1') %>
+    <!-- Notificación de favoritos -->
+    <div id="favorite-notification" class="fixed bottom-4 right-4 z-50 hidden">
+      <div
+        class="bg-white border-l-4 border-green-500 text-gray-800 shadow-lg rounded-lg px-4 py-3 flex items-center animate-fade-in"
+      >
+        <svg
+          id="notification-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 mr-2 text-green-500"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M5 13l4 4L19 7"
+          />
+        </svg>
+        <span id="favorite-message" class="font-medium"></span>
+      </div>
+    </div>
+
+    <!-- Contenedor principal -->
+    <main class="w-full box-border overflow-x-hidden px-2 sm:px-4 md:px-6 py-8">
+      <!-- Tarjeta de producto -->
+      <article
+        class="flex flex-col md:flex-row bg-white dark:bg-[#23272f] rounded-lg shadow-lg overflow-hidden"
+      >
+        <!-- Galería de imágenes -->
+        <section
+          class="w-full md:w-1/2 p-4 sm:p-6 flex items-center justify-center bg-gray-50 dark:bg-[#18181b]"
+        >
+          <figure class="w-full flex items-center justify-center">
+            <img
+              id="main-image"
+              src="<%= producto.foto_producto %>"
+              alt="<%= producto.nombre %>"
+              class="w-full max-w-md sm:max-w-lg md:max-w-xl h-80 sm:h-96 md:h-[32rem] object-fit border border-gray-300 dark:border-gray-700 rounded-lg mb-4 bg-white dark:bg-[#23272f]"
+              loading="lazy"
+            />
+          </figure>
+        </section>
+
+        <!-- Información del producto -->
+        <section
+          class="w-full md:w-1/2 p-4 sm:p-8 border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-700 flex flex-col justify-center"
+        >
+          <header>
+            <h1
+              class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 font-oswald dark:text-white"
+            >
+              <%= producto.nombre %>
+            </h1>
+          </header>
+
+          <!-- Precio y descuento -->
+          <div class="mb-6">
+            <div class="flex items-center flex-wrap gap-2">
+              <% if(producto.descuento_porcentaje > 0){ %>
+              <span
+                class="text-2xl sm:text-3xl font-bold text-orange-600 dark:text-orange-400"
+                >MX$<%= (producto.precio - (producto.precio *
+                (producto.descuento_porcentaje / 100))) %></span
+              >
+              <span
+                class="text-lg line-through text-gray-400 dark:text-gray-500"
+                >MX$<%= producto.precio %></span
+              >
+              <span
+                class="bg-orange-500 dark:bg-orange-600 text-white px-2 py-1 rounded text-sm"
+                >-<%= producto.descuento_porcentaje %>% dto.</span
+              >
+              <% } else { %>
+              <span
+                class="text-2xl sm:text-3xl font-bold text-orange-600 dark:text-orange-400"
+                >MX$<%= producto.precio %></span
+              >
+              <% } %>
+            </div>
+          </div>
+
+          <!-- Descripción -->
+          <div class="mb-6">
+            <h2 class="sr-only">Descripción del producto</h2>
+            <p class="text-base sm:text-lg dark:text-gray-200">
+              <%= producto.descripcion %>
+            </p>
+          </div>
+
+          <p class="text-gray-500 dark:text-gray-400 text-sm ml-2"
+                >Stock: <%= producto.stock %></p>
+
+          <!-- Divisor -->
+          <hr class="border-t border-gray-200 dark:border-gray-700 my-6" />
+
+          <!-- Detalles del producto -->
+          <% let detallesObj = {}; try { detallesObj =
+          JSON.parse(producto.detalles); } catch(e) { detallesObj = {}; } %> <%
+          if (Object.keys(detallesObj).length > 0) { %>
+          <div class="mb-6">
+            <h2
+              class="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200"
+            >
+              Detalles del producto
+            </h2>
+            <ul
+              class="list-disc pl-6 space-y-1 text-base text-gray-700 dark:text-gray-300"
+            >
+              <% Object.entries(detallesObj).forEach(function([key, value]) { %>
+              <li>
+                <span class="font-medium">
+                  <%= key.replace(/_/g, ' ').replace(/\b\w/g, l =>
+                  l.toUpperCase()) %>:
+                </span>
+                <%= value === true ? 'Sí' : value %>
+              </li>
+              <% }); %>
+            </ul>
+          </div>
+          <% } %>
+
+          <!-- Divisor -->
+          <hr class="border-t border-gray-200 dark:border-gray-700 my-6" />
+
+          <!-- Botones de acción -->
+          <div class="flex flex-col sm:flex-row gap-4">
+            <button
+              class="bg-orange-600 dark:bg-orange-500 hover:bg-orange-700 dark:hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded flex-grow text-center transition-colors duration-200"
+              data-producto-id="<%= producto.id %>"
+              id="btn-add-carrito"
+            >
+              Añadir al carrito
+            </button>
+
+            <button
+              class="bg-gray-800 dark:bg-gray-700 hover:bg-gray-900 dark:hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded flex-grow text-center transition-colors duration-200"
+            >
+              Comprar ahora
+            </button>
+
+            <button
+              id="favorite-btn"
+              class="flex items-center justify-center bg-white dark:bg-[#23272f] <% if(favorito) { %> bg-orange-500 <% } %> border border-orange-500 text-orange-600 dark:text-orange-400 hover:bg-orange-500 hover:text-white dark:hover:bg-orange-600 dark:hover:text-white font-semibold py-3 px-6 rounded transition-all duration-200 relative overflow-hidden group"
+              onclick="toggleFavorite()"
+              aria-label="Agregar a Favoritos"
+            >
+              <span
+                id="favorite-icon"
+                class="text-2xl leading-none transition-colors duration-200"
+                ><% if(favorito){ %> ♥️ <% } else { %>♡<% } %></span
+              >
+              <span
+                class="absolute inset-0 bg-orange-500 opacity-0 rounded-full scale-0 transform transition-all duration-300 group-hover:opacity-10 group-active:opacity-20"
+              ></span>
+            </button>
+          </div>
+        </section>
+      </article>
+    </main>
+
+    <!-- Sección de productos relacionados con carrusel de 4 elementos -->
+    <section
+      class="py-6 bg-orange-50 dark:bg-[#23272f] border-t border-gray-200 dark:border-gray-700"
+    >
+      <div class="container mx-auto px-2 sm:px-4 md:px-6">
+        <h2
+          class="text-2xl md:text-3xl font-bold text-center text-gray-800 dark:text-white mb-8 font-oswald"
+        >
+          Artículos Relacionados
+        </h2>
+
+        <div class="relative w-full max-w-7xl mx-auto carrusel-container">
+          <!-- Carrusel de productos relacionados -->
+          <div class="carrusel-track" id="relatedProductsTrack">
+            <% if (relacionados && relacionados.length > 0) { %> <%
+            relacionados.forEach(function(rel) { %>
+            <div class="carrusel-item w-64 flex-shrink-0">
+              <article
+                class="bg-white dark:bg-[#18181b] dark:border dark:border-gray-700 rounded-xl p-4 shadow h-full flex flex-col group transition-colors duration-200"
+              >
+                <a href="/producto/<%= rel.id %>" class="block flex-grow">
+                  <div
+                    class="aspect-square overflow-hidden mb-3 bg-gray-100 dark:bg-[#23272f] rounded-lg"
+                  >
+                    <img
+                      src="<%= rel.foto_producto %>"
+                      alt="<%= rel.nombre %>"
+                      class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <div class="mt-auto">
+                    <h3
+                      class="text-lg font-medium text-gray-800 dark:text-gray-100 mb-1"
+                    >
+                      <%= rel.nombre %>
+                    </h3>
+                    <p class="text-primary font-bold dark:text-orange-400">
+                      MX$<%= rel.precio %>
+                    </p>
+                  </div>
+                </a>
+              </article>
+            </div>
+            <% }); %> <% } else { %>
+            <div
+              class="text-center w-full text-gray-500 dark:text-gray-400 py-8"
+            >
+              No hay productos relacionados.
+            </div>
+            <% } %>
+          </div>
+
+          <!-- Controles del carrusel -->
+          <div
+            class="absolute top-1/2 left-0 w-full flex justify-between px-2 -translate-y-1/2 pointer-events-none"
+          >
+            <button
+              class="bg-black/50 hover:bg-black/80 text-white text-2xl p-2 rounded-full pointer-events-auto shadow-lg z-10"
+              onclick="moveRelatedCarousel(-1)"
+            >
+              ❮
+            </button>
+            <button
+              class="bg-black/50 hover:bg-black/80 text-white text-2xl p-2 rounded-full pointer-events-auto shadow-lg z-10"
+              onclick="moveRelatedCarousel(1)"
+            >
+              ❯
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal Custom -->
+    <div
+      id="customModal"
+      class="fixed inset-0 z-50 flex items-center justify-center hidden"
+    >
+      <!-- Overlay -->
+      <div class="absolute inset-0 bg-black opacity-50 dark:opacity-70"></div>
+      <!-- Modal container -->
+      <div
+        class="relative bg-white dark:bg-[#18181b] text-gray-800 dark:text-gray-100 rounded-lg shadow-lg p-6 max-w-md w-full mx-4"
+      >
+        <!-- Título del modal -->
+        <h2
+          id="modalTitle"
+          class="text-2xl font-bold mb-4 text-orange-600 font-oswald"
+        ></h2>
+        <!-- Mensaje del modal -->
+        <p id="modalMessage" class="mb-6 text-base"></p>
+        <!-- Botón para cerrar -->
+        <button
+          id="modalClose"
+          class="w-full bg-orange-600 hover:bg-orange-700 dark:bg-orange-600 dark:hover:bg-orange-700 text-white font-semibold py-3 rounded-lg transition"
+        >
+          ACEPTAR
+        </button>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <%- include('partials/footer') %>
+    <script>
+      window.producto_id = <%= producto.id %>;
+      window.favorito = <%= favorito ? 'true' : 'false' %>;
+    </script>
+    <script src="/js/productoScript.js"></script>
+    <script src="/js/colorScheme.js"></script>
+  </body>
+</html>

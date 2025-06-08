@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+    <title>KADENAS BIKES</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/js/tailwindConfig.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Share+Tech&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+  </head>
+  <body
+    class="bg-white dark:bg-[#18181b] text-gray-800 dark:text-gray-100 font-poppins"
+  >
+    <!--HEADER DE LA PÁGINA-->
+    <%- include('partials/header2') %>
+
+    <main class="w-full max-w-full min-h-screen box-border overflow-x-hidden">
+      <section
+        id="inicio"
+        class="relative min-h-[70vh] sm:min-h-[80vh] md:min-h-[90vh] flex flex-col justify-center items-center text-white text-center px-2 sm:px-4 md:px-6 overflow-hidden pt-24 md:pt-0 w-full max-w-full"
+      >
+        <video
+          autoplay
+          loop
+          muted
+          playsinline
+          class="absolute inset-0 w-full h-full object-cover z-0 max-w-full max-h-full"
+        >
+          <source src="/images/video_fondo.mp4" type="video/mp4" />
+          TU NAVEGADOR NO SOPORTA EL VIDEO DE FONDO 😂😂😂👹👹👹💩💩💩
+        </video>
+        <div
+          class="absolute inset-0 bg-black bg-opacity-60 z-10 w-full max-w-full"
+        ></div>
+        <div
+          class="relative z-20 flex flex-col items-center justify-center w-full max-w-full"
+        >
+          <h1
+            class="text-3xl sm:text-4xl md:text-6xl font-extrabold mb-4 drop-shadow-lg font-oswald w-full max-w-2xl mx-auto"
+          >
+            BIENVENIDO A KADENAS BIKES
+          </h1>
+          <p
+            class="text-base sm:text-xl md:text-2xl mb-6 w-full max-w-xl mx-auto"
+          >
+            ¡Bienvenido a KADENAS BIKES, tu destino número uno para bicicletas
+            de alta gama y personalizadas!
+          </p>
+          <a
+            href="#contacto"
+            class="bg-orange-600 hover:bg-orange-700 transition text-white font-semibold px-6 py-3 rounded-xl shadow-lg"
+          >
+            CONTACTANOS
+          </a>
+        </div>
+      </section>
+
+      <section
+        id="nosotros"
+        class="py-10 sm:py-16 md:py-20 bg-gray-100 dark:bg-[#23272f] px-2 sm:px-4 md:px-6 w-full max-w-full"
+        data-aos="fade-up"
+        data-aos-offset="100"
+        data-aos-once="true"
+      >
+        <div class="max-w-4xl mx-auto text-center">
+          <h2
+            class="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 font-oswald w-full"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
+            SOBRE NOSOTROS
+          </h2>
+          <p
+            class="text-sm sm:text-base md:text-lg mb-4"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
+            Somos un equipo de apacionados por las bicicletas que en busca de
+            bicicletas cada vez mejores y de la más alta calidad creó una
+            empresa dedicada a la venta de las mejores y mas aclamadas
+            bicicletas para que disfrutes de lo mejor de andar en bicicleta.
+          </p>
+
+          <a
+            href="/nosotros"
+            class="bg-[#007bff] text-white py-[10px] px-[20px]"
+            id="conocenos"
+            data-aos="fade-up"
+            data-aos-delay="400"
+            >¡Conocenos!</a
+          >
+        </div>
+      </section>
+
+      <section
+        id="servicios"
+        class="py-10 sm:py-16 md:py-20 px-2 sm:px-4 md:px-6 bg-white dark:bg-[#18181b] w-full max-w-full"
+        data-aos="fade-up"
+        data-aos-offset="100"
+        data-aos-once="true"
+      >
+        <div class="max-w-6xl mx-auto text-center">
+          <h2
+            class="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 sm:mb-10 md:mb-12 font-oswald w-full"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
+            NUESTROS SERVICIOS
+          </h2>
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 w-full"
+          >
+            <div
+              class="p-4 sm:p-6 bg-gray-50 dark:bg-[#23272f] rounded-xl shadow hover:shadow-lg transition w-full"
+              data-aos="fade-up"
+              data-aos-delay="300"
+            >
+              <div class="mb-4 text-orange-500">
+                <i class="fa-solid fa-2x fa-bicycle w-10 h-10 mx-auto"></i>
+              </div>
+              <h3 class="text-lg sm:text-xl font-semibold mb-2">
+                BICICLETAS COMPLETAS
+              </h3>
+              <p class="text-xs sm:text-sm md:text-base">
+                MODELOS NUEVOS Y CUIDADOS PARA LA COMODIDAD DE TU VIAJE
+              </p>
+            </div>
+            <div
+              class="p-4 sm:p-6 bg-gray-50 dark:bg-[#23272f] rounded-xl shadow hover:shadow-lg transition w-full"
+              data-aos="fade-up"
+              data-aos-delay="400"
+            >
+              <div class="mb-4 text-orange-500">
+                <i class="fa-solid fa-2x fa-gear w-10 h-10 mx-auto"></i>
+              </div>
+              <h3 class="text-lg sm:text-xl font-semibold mb-2">ACCESORIOS</h3>
+              <p class="text-xs sm:text-sm md:text-base">
+                ACCESORIOS PARA MEJORAR TU EXPERIENCIA EN BICICLETA
+              </p>
+            </div>
+            <div
+              class="p-4 sm:p-6 bg-gray-50 dark:bg-[#23272f] rounded-xl shadow hover:shadow-lg transition w-full"
+              data-aos="fade-up"
+              data-aos-delay="500"
+            >
+              <div class="mb-4 text-orange-500">
+                <i class="fa-solid fa-2x fa-wrench w-10 h-10 mx-auto"></i>
+              </div>
+              <h3 class="text-lg sm:text-xl font-semibold mb-2">REFACCIONES</h3>
+              <p class="text-xs sm:text-sm md:text-base">
+                ARREGLA RAPIDO TU BICICLETA CON NUESTRAS REFACCIONES
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="galeria"
+        class="py-14 sm:py-20 px-2 sm:px-4 md:px-6 bg-orange-500 dark:bg-orange-600 text-white w-full max-w-full"
+        data-aos="fade-up"
+        data-aos-offset="100"
+        data-aos-once="true"
+      >
+        <div class="max-w-6xl mx-auto">
+          <h2
+            class="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 text-center font-oswald w-full"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
+            NUESTROS PRODUCTOS
+          </h2>
+
+          <div
+            class="carousel-container relative overflow-hidden rounded-lg shadow-xl w-full max-w-full min-h-[440px]"
+            data-aos="fade-up"
+            data-aos-delay="200"
+            id="carousel-inner-container"
+          >
+            
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="contacto"
+        class="py-10 sm:py-16 md:py-20 px-2 sm:px-4 md:px-6 bg-gray-100 dark:bg-[#23272f] w-full max-w-full"
+      >
+        <div class="max-w-xl mx-auto">
+          <h2
+            class="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 font-oswald text-center w-full"
+          >
+            CONTACTANOS
+          </h2>
+          <form
+            method="post"
+            action="/email/enviar-mensaje"
+            id="formulario-contacto"
+            class="space-y-4 text-left w-full"
+          >
+            <input
+              type="text"
+              id="nombre_contacto"
+              name="nombre_contacto"
+              placeholder="TU NOMBRE"
+              required
+              class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 dark:bg-[#18181b] dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400"
+            />
+            <input
+              type="email"
+              id="correo_contacto"
+              name="correo_contacto"
+              placeholder="TU EMAIL"
+              required
+              class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 dark:bg-[#18181b] dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400"
+            />
+            <textarea
+              placeholder="TU MENSAJE"
+              required
+              id="mensaje_contacto"
+              name="mensaje_contacto"
+              rows="4"
+              class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 dark:bg-[#18181b] dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400"
+            ></textarea>
+            <button
+              type="submit"
+              class="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 rounded-lg transition"
+            >
+              ENVIAR MENSAJE
+            </button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <%- include('partials/footer') %>
+
+    <!-- Modal Custom -->
+    <div
+      id="customModal"
+      class="fixed inset-0 z-50 flex items-center justify-center hidden"
+    >
+      <!-- Overlay -->
+      <div class="absolute inset-0 bg-black opacity-50 dark:opacity-70"></div>
+      <!-- Modal container -->
+      <div
+        class="relative bg-white dark:bg-[#18181b] text-gray-800 dark:text-gray-100 rounded-lg shadow-lg p-6 max-w-md w-full mx-4"
+      >
+        <!-- Título del modal -->
+        <h2
+          id="modalTitle"
+          class="text-2xl font-bold mb-4 text-orange-600 font-oswald"
+        ></h2>
+        <!-- Mensaje del modal -->
+        <p id="modalMessage" class="mb-6 text-base"></p>
+        <!-- Botón para cerrar -->
+        <button
+          id="modalClose"
+          class="w-full bg-orange-600 hover:bg-orange-700 dark:bg-orange-600 dark:hover:bg-orange-700 text-white font-semibold py-3 rounded-lg transition"
+        >
+          ACEPTAR
+        </button>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/bienvenidaScript.js"></script>
+    <script src="/js/colorScheme.js"></script>
+  </body>
+</html>

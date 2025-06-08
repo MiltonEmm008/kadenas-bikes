@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es" id="html-root">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mis Productos Favoritos | Kadenas Bikes</title>
+    <meta
+      name="description"
+      content="Explora tus productos favoritos guardados en TuTiendaDeBicis."
+    />
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/js/tailwindConfig.js"></script>
+    <style>
+      html,
+      body {
+        font-family: "Poppins", "Oswald", Arial, sans-serif;
+      }
+      .font-oswald {
+        font-family: "Oswald", Arial, sans-serif;
+      }
+      .font-poppins {
+        font-family: "Poppins", Arial, sans-serif;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-white dark:bg-[#18181b] text-gray-800 dark:text-gray-100 font-poppins pt-20 md:pt-24 min-h-screen flex flex-col"
+  >
+    <%- include('partials/header1') %>
+
+    <main class="flex-grow w-full box-border px-2 sm:px-4 md:px-6 py-8">
+      <div class="container mx-auto">
+        <h1
+          class="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-10 font-oswald text-gray-900 dark:text-white"
+        >
+          Mis Productos Favoritos
+        </h1>
+
+        <section id="favorite-products-list" class="flex flex-col gap-6">
+          <% if (favoritos && favoritos.length > 0) { %> <%
+          favoritos.forEach(function(producto) { %>
+          <article
+            class="bg-white dark:bg-[#23272f] rounded-lg shadow-lg overflow-hidden flex flex-col sm:flex-row items-stretch transition-transform duration-300 hover:scale-[1.01]"
+          >
+            <a
+              href="/producto/<%= producto.id %>"
+              class="w-full sm:w-48 md:w-56 lg:w-64 flex-shrink-0 aspect-video sm:aspect-square overflow-hidden bg-gray-100 dark:bg-[#18181b] flex items-center justify-center p-4"
+            >
+              <img
+                src="<%= producto.foto_producto %>"
+                alt="<%= producto.nombre %>"
+                class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300 rounded-md"
+                loading="lazy"
+              />
+            </a>
+
+            <div
+              class="p-4 flex-grow flex flex-col justify-between border-t sm:border-t-0 sm:border-l border-gray-200 dark:border-gray-700"
+            >
+              <div>
+                <a href="/producto/<%= producto.id %>">
+                  <h2
+                    class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2 font-oswald hover:text-orange-600 dark:hover:text-orange-400 transition-colors duration-200"
+                  >
+                    <%= producto.nombre %>
+                  </h2>
+                </a>
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-3">
+                  <%= producto.descripcion.substring(0, 150) %>...
+                </p>
+              </div>
+              <div class="mt-auto">
+                <div class="flex items-center gap-2 mb-4 flex-wrap">
+                  <% if(producto.descuento_porcentaje > 0){ %>
+                  <span
+                    class="text-xl font-bold text-orange-600 dark:text-orange-400"
+                    >MX$<%= (producto.precio - (producto.precio *
+                    (producto.descuento_porcentaje / 100))).toFixed(2) %></span
+                  >
+                  <span
+                    class="text-sm line-through text-gray-400 dark:text-gray-500"
+                    >MX$<%= producto.precio.toFixed(2) %></span
+                  >
+                  <span
+                    class="bg-orange-500 dark:bg-orange-600 text-white px-2 py-1 rounded text-xs"
+                    >-<%= producto.descuento_porcentaje %>%</span
+                  >
+                  <% } else { %>
+                  <span
+                    class="text-xl font-bold text-orange-600 dark:text-orange-400"
+                    >MX$<%= producto.precio.toFixed(2) %></span
+                  >
+                  <% } %>
+                </div>
+                <button
+                  class="w-full sm:w-auto bg-red-600 dark:bg-red-500 hover:bg-red-700 dark:hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center text-sm"
+                  onclick="removeFromFavorites(event, <%= producto.id %>)"
+                >
+                  <i data-feather="heart" class="w-4 h-4 mr-2 fill-current"></i>
+                  Quitar de Favoritos
+                </button>
+              </div>
+            </div>
+          </article>
+          <% }); %> <% } else { %>
+          <div
+            class="col-span-full text-center text-gray-500 dark:text-gray-400 py-12"
+          >
+            <p class="text-lg mb-4">
+              Aún no tienes productos en tu lista de favoritos.
+            </p>
+            <a
+              href="/busqueda"
+              class="inline-block bg-orange-600 dark:bg-orange-500 hover:bg-orange-700 dark:hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-md transition-colors duration-200"
+            >
+              Explorar productos
+            </a>
+          </div>
+          <% } %>
+        </section>
+      </div>
+    </main>
+
+    <%- include('partials/footer') %>
+
+    <div
+      id="customModal"
+      class="fixed inset-0 z-50 flex items-center justify-center hidden"
+    >
+      <div class="absolute inset-0 bg-black opacity-50 dark:opacity-70"></div>
+      <div
+        class="relative bg-white dark:bg-[#18181b] text-gray-800 dark:text-gray-100 rounded-lg shadow-lg p-6 max-w-md w-full mx-4"
+      >
+        <h2
+          id="modalTitle"
+          class="text-2xl font-bold mb-4 text-orange-600 font-oswald"
+        ></h2>
+        <p id="modalMessage" class="mb-6 text-base"></p>
+        <button
+          id="modalClose"
+          class="w-full bg-orange-600 hover:bg-orange-700 dark:bg-orange-600 dark:hover:bg-orange-700 text-white font-semibold py-3 rounded-lg transition"
+        >
+          ACEPTAR
+        </button>
+      </div>
+    </div>
+
+    <script src="/js/favoritoScript.js"></script>
+    <script src="/js/colorScheme.js"></script>
+  </body>
+</html>

@@ -1,0 +1,167 @@
+<header
+  class="fixed top-0 left-0 w-full max-w-full bg-black dark:bg-[#18181b] text-white z-50 shadow-md"
+>
+  <!-- HEADER RESPONSIVE: SIEMPRE OCUPA EL ANCHO COMPLETO DEL VIEWPORT -->
+  <div
+    class="w-full px-4 md:px-6 py-3 flex justify-between items-center box-border"
+  >
+    <div class="flex items-center gap-2 sm:gap-3">
+      <button id="menu-toggle" class="text-white focus:outline-none z-20 p-1">
+        <svg
+          class="w-6 h-6 sm:w-7 sm:h-7"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+      <div class="">
+        <img
+          class="object-fit w-16 sm:w-20"
+          src="/images/logotipo.png"
+          alt=""
+        />
+      </div>
+    </div>
+    <!-- MENU PRINCIPAL: EN MOVIL OCUPA TODO EL ANCHO, EN DESKTOP SE MANTIENE ABSOLUTO PERO SIN DESBORDAR -->
+    <nav
+      id="menu"
+      class="hidden flex-col absolute top-full left-0 w-full max-w-full bg-black dark:bg-[#18181b] text-white shadow-lg text-base px-4 py-3 transition-all duration-300 border-t border-gray-800 dark:border-gray-700"
+    >
+      <ul class="flex flex-col gap-2">
+        <li>
+          <a
+            href="/"
+            class="flex items-center gap-2 block py-2 px-2 rounded-md transition text-base hover:text-orange-400 md:hover:text-orange-400 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 sm:active:bg-orange-500/20 md:hover:bg-orange-500/20 md:active:scale-100 md:active:bg-transparent md:focus:ring-0"
+          >
+            <i data-feather="home" class="w-4 h-4"></i>
+            INICIO
+          </a>
+        </li>
+        <li>
+          <a
+            href="/nosotros"
+            class="flex items-center gap-2 block py-2 px-2 rounded-md transition text-base hover:text-orange-400 md:hover:text-orange-400 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 sm:active:bg-orange-500/20 md:hover:bg-orange-500/20 md:active:scale-100 md:active:bg-transparent md:focus:ring-0"
+          >
+            <i data-feather="users" class="w-4 h-4"></i>
+            NOSOTROS
+          </a>
+        </li>
+        <% if (user){ %>
+        <li>
+          <a
+            href="/busqueda"
+            class="flex items-center gap-2 block py-2 px-2 rounded-md transition text-base hover:text-orange-400 md:hover:text-orange-400 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 sm:active:bg-orange-500/20 md:hover:bg-orange-500/20 md:active:scale-100 md:active:bg-transparent md:focus:ring-0"
+          >
+            <i data-feather="search" class="w-4 h-4"></i>
+            BUSCAR
+          </a>
+        </li>
+        <li>
+          <a
+            href="/chat"
+            class="flex items-center gap-2 block py-2 px-2 rounded-md transition text-base hover:text-orange-400 md:hover:text-orange-400 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 sm:active:bg-orange-500/20 md:hover:bg-orange-500/20 md:active:scale-100 md:active:bg-transparent md:focus:ring-0"
+          >
+            <i data-feather="help-circle" class="w-4 h-4"></i>
+            SOPORTE
+          </a>
+        </li>
+        <% } %>
+        <li>
+          <a
+            href="/politicas"
+            class="flex items-center gap-2 block py-2 px-2 rounded-md transition text-base hover:text-orange-400 md:hover:text-orange-400 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 sm:active:bg-orange-500/20 md:hover:bg-orange-500/20 md:active:scale-100 md:active:bg-transparent md:focus:ring-0"
+          >
+            <i data-feather="file-text" class="w-4 h-4"></i>
+            POLITICAS DE USO
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <% if (!user){ %>
+    <div class="flex items-center gap-2 ml-auto">
+      <a
+        href="/auth/login"
+        class="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm rounded-md bg-orange-600 text-white font-semibold transition hover:bg-orange-700 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 sm:active:bg-orange-700/80 md:active:scale-100 md:active:bg-orange-600 md:focus:ring-0"
+        >INICIAR SESION</a
+      >
+      <a
+        href="/auth/register"
+        class="px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm rounded-md bg-gray-200 text-black font-semibold transition dark:bg-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 sm:active:bg-gray-400/40 dark:sm:active:bg-gray-800/40 md:active:scale-100 md:active:bg-gray-200 dark:md:active:bg-gray-700 md:focus:ring-0"
+        >REGISTRARSE</a
+      >
+    </div>
+    <% } else { %>
+    <div class="flex items-center gap-2 ml-auto">
+      <a
+        id="foto_usuario"
+        href="/"
+        class="flex items-center justify-center p-0 rounded-full border-2 border-orange-500 bg-gray-200 dark:bg-gray-700 transition hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-orange-400"
+        title="Mi Perfil"
+      >
+        <img
+          src="<%= user.foto_perfil %>"
+          alt="Foto del usuario"
+          class="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
+        />
+      </a>
+    </div>
+    <nav
+      id="menu-usuarios"
+      class="hidden flex-col absolute top-full left-0 w-full max-w-full bg-black dark:bg-[#18181b] text-white shadow-lg text-base px-4 py-3 transition-all duration-300 border-t border-gray-800 dark:border-gray-700"
+    >
+      <ul class="flex flex-col gap-2">
+        <li>
+          <a
+            href="/perfil"
+            class="float-right flex items-center gap-2 block py-2 px-2 rounded-md transition text-base hover:text-orange-400 md:hover:text-orange-400 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 sm:active:bg-orange-500/20 md:hover:bg-orange-500/20 md:active:scale-100 md:active:bg-transparent md:focus:ring-0"
+          >
+            <i data-feather="user" class="w-4 h-4"></i>
+            MI PERFIL
+          </a>
+        </li>
+        <li>
+          <a
+            href="/carrito"
+            class="float-right flex items-center gap-2 block py-2 px-2 rounded-md transition text-base hover:text-orange-400 md:hover:text-orange-400 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 sm:active:bg-orange-500/20 md:hover:bg-orange-500/20 md:active:scale-100 md:active:bg-transparent md:focus:ring-0"
+          >
+            <i data-feather="shopping-cart" class="w-4 h-4"></i>
+            CARRITO
+          </a>
+        </li>
+        <li>
+          <a
+            href="/favoritos"
+            class="float-right flex items-center gap-2 block py-2 px-2 rounded-md transition text-base hover:text-orange-400 md:hover:text-orange-400 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 sm:active:bg-orange-500/20 md:hover:bg-orange-500/20 md:active:scale-100 md:active:bg-transparent md:focus:ring-0"
+          >
+            <i data-feather="heart" class="w-4 h-4"></i>
+            FAVORITOS
+          </a>
+        </li>
+        <li>
+          <a
+            href="/mis-pedidos"
+            class="float-right block py-2 px-2 rounded-md transition text-base hover:text-orange-400 md:hover:text-orange-400 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 sm:active:bg-orange-500/20 md:hover:bg-orange-500/20 md:active:scale-100 md:active:bg-transparent md:focus:ring-0 flex items-center gap-2"
+          >
+            <i data-feather="file-text" class="w-4 h-4"></i>
+            MIS PEDIDOS
+          </a>
+        </li>
+        <li>
+          <a
+            href="/auth/logout"
+            class="float-right flex items-center gap-2 block py-2 px-2 rounded-md transition text-base hover:text-orange-400 md:hover:text-orange-400 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 sm:active:bg-orange-500/20 md:hover:bg-orange-500/20 md:active:scale-100 md:active:bg-transparent md:focus:ring-0"
+          >
+            <i data-feather="log-out" class="w-4 h-4"></i>
+            CERRAR SESIÓN
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <% } %>
+  </div>
+</header>

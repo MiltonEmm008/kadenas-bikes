@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Reporte de Productos</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+      .product-photo {
+        width: 64px;
+        height: 64px;
+        object-fit: cover;
+        border-radius: 0.75rem;
+        border: 2px solid #e5e7eb;
+        background: #fff;
+      }
+      .sticky-th {
+        position: sticky;
+        top: 0;
+        background: #f3f4f6;
+        z-index: 2;
+      }
+      .badge {
+        @apply px-2 py-1 rounded text-xs font-semibold;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gradient-to-tr from-green-50 via-white to-blue-100 min-h-screen"
+  >
+    <!-- Encabezado -->
+    <div class="max-w-4xl mx-auto rounded-2xl shadow-xl overflow-hidden mb-8">
+      <div
+        class="bg-gradient-to-r from-green-600 via-blue-600 to-green-400 p-8 flex flex-col sm:flex-row items-center gap-6"
+      >
+        <img
+          src="<%= logoBase64 %>"
+          alt="Logo"
+          class="w-20 h-20 rounded-full border-4 border-white shadow-lg bg-white"
+        />
+        <div class="flex-1 text-center sm:text-left">
+          <h1
+            class="text-4xl font-extrabold font-oswald text-white tracking-wide mb-1"
+          >
+            Reporte de Productos
+          </h1>
+          <p class="text-green-100 text-lg font-medium">
+            Inventario y estadísticas del sistema
+          </p>
+        </div>
+        <div class="hidden sm:block text-white text-right">
+          <span class="block text-xs opacity-70">Generado:</span>
+          <span class="font-bold text-sm"
+            ><%= new Date().toLocaleString('es-MX') %></span
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-5xl mx-auto">
+      <!-- Tarjetas resumen -->
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-6 mb-8">
+        <div
+          class="bg-white rounded-xl shadow flex flex-col items-center py-6 px-4 border-t-4 border-green-500"
+        >
+          <div class="bg-green-100 text-green-600 rounded-full p-3 mb-2">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+          </div>
+          <div class="text-2xl font-bold"><%= productos.length %></div>
+          <div class="text-gray-500">Total productos</div>
+        </div>
+        <div
+          class="bg-white rounded-xl shadow flex flex-col items-center py-6 px-4 border-t-4 border-blue-500"
+        >
+          <div class="bg-blue-100 text-blue-600 rounded-full p-3 mb-2">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+            </svg>
+          </div>
+          <div class="text-2xl font-bold">
+            <%= Object.keys(categorias).length %>
+          </div>
+          <div class="text-gray-500">Categorías</div>
+        </div>
+        <div
+          class="bg-white rounded-xl shadow flex flex-col items-center py-6 px-4 border-t-4 border-yellow-500"
+        >
+          <div class="bg-yellow-100 text-yellow-600 rounded-full p-3 mb-2">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+          </div>
+          <div class="text-2xl font-bold">
+            <%= Object.keys(proveedores).length %>
+          </div>
+          <div class="text-gray-500">Proveedores</div>
+        </div>
+        <div
+          class="bg-white rounded-xl shadow flex flex-col items-center py-6 px-4 border-t-4 border-indigo-500"
+        >
+          <div class="bg-indigo-100 text-indigo-600 rounded-full p-3 mb-2">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+            </svg>
+          </div>
+          <div class="text-2xl font-bold">
+            <%= stock.alto + stock.bajo + stock.cero %>
+          </div>
+          <div class="text-gray-500">Stock total</div>
+        </div>
+      </div>
+
+      <!-- Gráficos -->
+      <div class="flex flex-col gap-8 items-center justify-center mb-12">
+        <div
+          class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center border border-green-100 w-full max-w-2xl"
+        >
+          <h2
+            class="font-semibold mb-3 text-green-700 tracking-wide border-b border-green-100 w-full pb-2 text-center"
+          >
+            Distribución por Categoría
+          </h2>
+          <div class="w-full">
+            <canvas id="graficoCategorias"></canvas>
+          </div>
+        </div>
+        <div
+          class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center border border-blue-100 w-full max-w-2xl"
+        >
+          <h2
+            class="font-semibold mb-3 text-blue-700 tracking-wide border-b border-blue-100 w-full pb-2 text-center"
+          >
+            Distribución por Proveedor
+          </h2>
+          <div class="w-full">
+            <canvas id="graficoProveedores"></canvas>
+          </div>
+        </div>
+        <div
+          class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center border border-yellow-100 w-full max-w-2xl"
+        >
+          <h2
+            class="font-semibold mb-3 text-yellow-700 tracking-wide border-b border-yellow-100 w-full pb-2 text-center"
+          >
+            Stock de Productos
+          </h2>
+          <div class="w-full">
+            <canvas id="graficoStock"></canvas>
+          </div>
+        </div>
+        <div
+          class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center border border-indigo-100 w-full max-w-2xl"
+        >
+          <h2
+            class="font-semibold mb-3 text-indigo-700 tracking-wide border-b border-indigo-100 w-full pb-2 text-center"
+          >
+            Productos Agregados Últimos 7 Días
+          </h2>
+          <div class="w-full">
+            <canvas id="graficoDias"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla de productos -->
+      <div class="bg-white rounded-2xl shadow-lg overflow-x-auto mb-10">
+        <table class="min-w-full table-auto">
+          <thead>
+            <tr>
+              <th class="sticky-th py-3 px-4">Foto</th>
+              <th class="sticky-th py-3 px-4">Nombre</th>
+              <th class="sticky-th py-3 px-4">Precio</th>
+              <th class="sticky-th py-3 px-4">Descuento</th>
+              <th class="sticky-th py-3 px-4">Categoría</th>
+              <th class="sticky-th py-3 px-4">Marca</th>
+              <th class="sticky-th py-3 px-4">Proveedor</th>
+              <th class="sticky-th py-3 px-4">Stock</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% productos.forEach(p => { %>
+            <tr class="border-b last:border-none hover:bg-green-50">
+              <td class="py-2 px-4 text-center">
+                <img
+                  src="<%= p.foto_producto_base64 %>"
+                  alt="foto"
+                  class="product-photo mx-auto"
+                />
+              </td>
+              <td class="py-2 px-4 font-semibold text-gray-700">
+                <%= p.nombre %>
+              </td>
+              <td class="py-2 px-4 text-blue-700 font-bold">
+                $<%= p.precio.toFixed(2) %>
+              </td>
+              <td class="py-2 px-4">
+                <%= p.descuento_porcentaje ? (p.descuento_porcentaje + '%') : '-' %>
+              </td>
+              <td class="py-2 px-4">
+                <span class="badge bg-blue-100 text-blue-700"
+                  ><%= p.categoria %></span
+                >
+              </td>
+              <td class="py-2 px-4">
+                <span class="badge bg-yellow-100 text-yellow-700"
+                  ><%= p.marca %></span
+                >
+              </td>
+              <td class="py-2 px-4">
+                <span class="badge bg-green-100 text-green-700"
+                  ><%= p.proveedor_nombre %></span
+                >
+              </td>
+              <td class="py-2 px-4 text-center">
+                <% if (p.stock === 0) { %>
+                <span class="badge bg-red-100 text-red-600">Sin stock</span>
+                <% } else if (p.stock <= 5) { %>
+                <span class="badge bg-yellow-100 text-yellow-800"
+                  >Bajo (<%= p.stock %>)</span
+                >
+                <% } else { %>
+                <span class="badge bg-green-100 text-green-700"
+                  ><%= p.stock %></span
+                >
+                <% } %>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center text-xs text-gray-400 py-4">
+        Reporte generado automáticamente por Kadenas Bikes &copy; <%= new
+        Date().getFullYear() %>. Fecha y hora: <%= new
+        Date().toLocaleString('es-MX') %>
+    </footer>
+
+    <!-- Scripts de gráficos -->
+    <script>
+      // Gráfico de Categorías
+      new Chart(document.getElementById('graficoCategorias'), {
+        type: 'pie',
+        data: {
+          labels: <%- JSON.stringify(Object.keys(categorias)) %>,
+          datasets: [{
+            data: <%- JSON.stringify(Object.values(categorias)) %>,
+            backgroundColor: [
+              '#60a5fa', '#fbbf24', '#34d399', '#a78bfa', '#f87171', '#f472b6', '#38bdf8', '#facc15', '#4ade80'
+            ]
+          }]
+        },
+        options: { plugins: { legend: { position: 'bottom' } } }
+      });
+
+      // Gráfico de Proveedores
+      new Chart(document.getElementById('graficoProveedores'), {
+        type: 'doughnut',
+        data: {
+          labels: <%- JSON.stringify(Object.keys(proveedores)) %>,
+          datasets: [{
+            data: <%- JSON.stringify(Object.values(proveedores)) %>,
+            backgroundColor: [
+              '#fbbf24', '#60a5fa', '#34d399', '#a78bfa', '#f87171', '#f472b6', '#38bdf8', '#facc15', '#4ade80'
+            ]
+          }]
+        },
+        options: { plugins: { legend: { position: 'bottom' } } }
+      });
+
+      // Gráfico de Stock
+      new Chart(document.getElementById('graficoStock'), {
+        type: 'bar',
+        data: {
+          labels: ['Con stock', 'Bajo stock', 'Sin stock'],
+          datasets: [{
+            label: 'Productos',
+            data: [<%= stock.alto %>, <%= stock.bajo %>, <%= stock.cero %>],
+            backgroundColor: ['#34d399', '#fbbf24', '#f87171']
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+
+      // Gráfico de productos agregados últimos 7 días
+      new Chart(document.getElementById('graficoDias'), {
+        type: 'line',
+        data: {
+          labels: <%- JSON.stringify(diasLabels) %>,
+          datasets: [{
+            label: 'Agregados',
+            data: <%- JSON.stringify(dias) %>,
+            fill: true,
+            backgroundColor: 'rgba(59,130,246,0.15)',
+            borderColor: '#2563eb',
+            tension: 0.3
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+    </script>
+  </body>
+</html>
