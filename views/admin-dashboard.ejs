@@ -20,49 +20,56 @@
     class="bg-gray-100 dark:bg-[#18181b] text-gray-800 dark:text-gray-100 font-poppins flex min-h-screen"
   >
     <aside
-      class="fixed inset-y-0 left-0 z-30 flex flex-col h-full bg-black dark:bg-[#121212] text-white w-64 transform transition-transform duration-300 ease-in-out md:translate-x-0 -translate-x-full"
+      class="fixed inset-y-0 left-0 z-30 flex flex-col h-full w-64 transform transition-transform duration-300 ease-in-out bg-white dark:bg-[#121212] text-gray-900 dark:text-white md:translate-x-0 -translate-x-full"
       id="sidebar"
     >
+      <!-- Logo -->
       <div
-        class="flex items-center justify-center py-6 px-4 border-b border-gray-700 dark:border-gray-800"
+        class="flex items-center justify-center py-6 px-4 border-b border-gray-200 dark:border-gray-800"
       >
         <img
-          class="object-fit w-24"
+          class="object-contain w-24"
           src="/images/logotipo.png"
           alt="KADENAS BIKES Logo"
         />
         <h1 class="text-xl font-bold font-oswald ml-2">KADENAS BIKES</h1>
       </div>
 
+      <!-- Navegación -->
       <nav class="flex-grow px-4 py-6 space-y-2">
         <a
           href="#inicio"
-          class="flex items-center py-2.5 px-4 rounded-md transition duration-200 hover:bg-orange-600 hover:text-white bg-orange-500 text-white"
+          class="flex items-center py-2.5 px-4 rounded-md transition duration-200 bg-orange-500 text-white hover:bg-orange-600"
         >
           <i data-feather="home" class="sidebar-icon mr-3"></i> Inicio
         </a>
+
         <a
           href="#usuarios"
-          class="flex items-center py-2.5 px-4 rounded-md transition duration-200 hover:bg-orange-600 hover:text-white"
+          class="flex items-center py-2.5 px-4 rounded-md transition duration-200 hover:bg-orange-100 hover:text-orange-700 dark:hover:bg-orange-600 dark:hover:text-white"
         >
           <i data-feather="users" class="sidebar-icon mr-3"></i> Usuarios
         </a>
+
         <a
           href="#productos"
-          class="flex items-center py-2.5 px-4 rounded-md transition duration-200 hover:bg-orange-600 hover:text-white"
+          class="flex items-center py-2.5 px-4 rounded-md transition duration-200 hover:bg-orange-100 hover:text-orange-700 dark:hover:bg-orange-600 dark:hover:text-white"
         >
           <i data-feather="package" class="sidebar-icon mr-3"></i> Productos
         </a>
+
         <a
           href="#reportes"
-          class="flex items-center py-2.5 px-4 rounded-md transition duration-200 hover:bg-orange-600 hover:text-white"
+          class="flex items-center py-2.5 px-4 rounded-md transition duration-200 hover:bg-orange-100 hover:text-orange-700 dark:hover:bg-orange-600 dark:hover:text-white"
         >
           <i data-feather="bar-chart-2" class="sidebar-icon mr-3"></i> Reportes
         </a>
-        <!--TODO-->
-        <% if (user.rol === "superadmin") { %><a
+
+        <!-- Solo para superadmin -->
+        <% if (user.rol === "superadmin") { %>
+        <a
           href="#administradores"
-          class="flex items-center py-2.5 px-4 rounded-md transition duration-200 hover:bg-orange-600 hover:text-white"
+          class="flex items-center py-2.5 px-4 rounded-md transition duration-200 hover:bg-orange-100 hover:text-orange-700 dark:hover:bg-orange-600 dark:hover:text-white"
         >
           <i data-feather="shield" class="sidebar-icon mr-3"></i>
           Administradores
@@ -71,34 +78,38 @@
 
         <a
           href="#soporte"
-          class="flex items-center py-2.5 px-4 rounded-md transition duration-200 hover:bg-orange-600 hover:text-white"
+          class="flex items-center py-2.5 px-4 rounded-md transition duration-200 hover:bg-orange-100 hover:text-orange-700 dark:hover:bg-orange-600 dark:hover:text-white"
         >
           <i data-feather="help-circle" class="sidebar-icon mr-3"></i> Soporte
         </a>
+
         <a
           href="#pedidos"
-          class="flex items-center py-2.5 px-4 rounded-md transition duration-200 hover:bg-orange-600 hover:text-white"
+          class="flex items-center py-2.5 px-4 rounded-md transition duration-200 hover:bg-orange-100 hover:text-orange-700 dark:hover:bg-orange-600 dark:hover:text-white"
         >
           <i data-feather="shopping-cart" class="sidebar-icon mr-3"></i> Pedidos
         </a>
+
         <a
           href="#proveedores"
-          class="flex items-center py-2.5 px-4 rounded-md transition duration-200 hover:bg-orange-600 hover:text-white"
+          class="flex items-center py-2.5 px-4 rounded-md transition duration-200 hover:bg-orange-100 hover:text-orange-700 dark:hover:bg-orange-600 dark:hover:text-white"
         >
           <i data-feather="truck" class="sidebar-icon mr-3"></i> Proveedores
         </a>
+
         <a
           href="/auth/logout"
-          class="flex items-center py-2.5 px-4 rounded-md transition duration-200 hover:bg-red-600 hover:text-white"
+          class="flex items-center py-2.5 px-4 rounded-md transition duration-200 hover:bg-red-100 hover:text-red-700 dark:hover:bg-red-600 dark:hover:text-white"
         >
           <i data-feather="log-out" class="sidebar-icon mr-3"></i> Cerrar Sesión
         </a>
       </nav>
 
-      <div class="px-4 py-4 border-t border-gray-700 dark:border-gray-800">
+      <!-- Botón de modo oscuro -->
+      <div class="px-4 py-4 border-t border-gray-200 dark:border-gray-800">
         <button
           id="darkModeToggle"
-          class="w-full flex items-center py-2 px-4 rounded-md text-sm hover:bg-gray-700 dark:hover:bg-gray-600"
+          class="w-full flex items-center py-2 px-4 rounded-md text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200"
         >
           <i
             data-feather="moon"
@@ -169,12 +180,36 @@
       </main>
 
       <footer
-        class="bg-white dark:bg-[#23272f] text-gray-600 dark:text-gray-400 py-6 text-center border-t border-gray-200 dark:border-gray-700"
+        class="bg-white dark:bg-[#23272f] text-gray-600 dark:text-gray-400 py-6 border-t border-gray-200 dark:border-gray-700"
       >
-        <p class="text-xs sm:text-sm md:text-base">
-          © 2025 KADENAS BIKES - Panel de Administración. Todos los derechos
-          reservados.
-        </p>
+        <div
+          class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 px-4"
+        >
+          <div class="mb-2 md:mb-0 text-center md:text-left">
+            <p
+              class="text-xs sm:text-sm md:text-base font-semibold tracking-wide"
+            >
+              © 2025 KADENAS BIKES
+            </p>
+            <p class="text-xs sm:text-sm md:text-base">
+              Panel de Administración
+            </p>
+          </div>
+          <div class="flex flex-col items-center md:items-end">
+            <span class="text-xs sm:text-sm md:text-base font-semibold mb-1"
+              >CREADORES:</span
+            >
+            <ul
+              class="flex flex-wrap gap-x-4 gap-y-1 justify-center md:justify-end text-xs sm:text-sm"
+            >
+              <li>Milton Emmanuel Rodríguez Pérez</li>
+              <li>William Paul Macías Vazquez</li>
+              <li>Carlos Antonio Gonzalez Gomez</li>
+              <li>Cristopher Acosta Castañeda</li>
+              <li>Jesus Donato Jauregui Llamas</li>
+            </ul>
+          </div>
+        </div>
       </footer>
     </div>
 
@@ -192,21 +227,17 @@
         <h2
           id="modalTitle"
           class="text-2xl text-center font-bold mb-4 text-orange-600 font-oswald"
-        >TUS DATOS</h2>
+        >
+          TUS DATOS
+        </h2>
         <!-- Mensaje del modal -->
         <div class="flex flex-col items-center justify-center">
           <p class="mb-6 text-base">
             Nombre de usuario: <%= user.nombre_usuario %>
           </p>
-          <p class="mb-6 text-base">
-            Correo: <%= user.correo %>
-          </p>
-          <p class="mb-6 text-base">
-            Rol: <%= user.rol %>
-          </p>
-          <p class="mb-6 text-base">
-            Saldo: $<%= user.saldo %>
-          </p>
+          <p class="mb-6 text-base">Correo: <%= user.correo %></p>
+          <p class="mb-6 text-base">Rol: <%= user.rol %></p>
+          <p class="mb-6 text-base">Saldo: $<%= user.saldo %></p>
         </div>
         <!-- Botón para cerrar -->
         <button

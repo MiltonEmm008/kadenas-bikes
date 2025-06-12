@@ -1,0 +1,17 @@
+PORT=3000
+JWT_SECRET=jwt_secret
+JWT_EXPIRES_IN=15m
+JWT_REFRESH_EXPIRES_IN=5d
+JWT_REFRESH_SECRET=jwt_refresh_secret
+GITHUB_CLIENT_ID=githubclientid
+GITHUB_CLIENT_SECRET=githubclientsecret
+CALLBACK_URL=http://localhost:myport/github/callback
+GOOGLE_CLIENT_ID=googleclientid
+GOOGLE_CLIENT_SECRET=googleclientsecret
+GOOGLE_CALLBACK_URL=http://localhost:myport/google/callback
+EMAIL_USER=userfornodemailer@gmail.com
+EMAIL_PASSWORD="my password from gmail"
+JWT_RESET_SECRET=jwt_secret_for_reset
+JWT_RESET_EXPIRES_IN=5m
+APP_URL=http://localhost:myport
+GEMINI_API_KEY=geminiapikey

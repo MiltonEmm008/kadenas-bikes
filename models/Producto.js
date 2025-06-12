@@ -130,21 +130,11 @@ class Producto extends BaseModel {
     return await BaseModel.all(sql);
   }
 
-  static async allWithSupplierJoinForSearch() {
-    const sql = `SELECT p.*, p2.nombre_empresa as proveedor_nombre 
-    FROM ${this.tableName} p
-    LEFT JOIN proveedores p2 
-    ON p.proveedor_id = p2.id
-    ORDER BY p.stock DESC;`;
-    return await BaseModel.all(sql);
-  }
-
   static async allWithLimit(limit) {
     const sql = `SELECT p.*, p2.nombre_empresa as proveedor_nombre 
     FROM ${this.tableName} p
     INNER JOIN proveedores p2 
     ON p.proveedor_id = p2.id
-    ORDER BY p.stock DESC
     LIMIT ${limit};`;
     return await BaseModel.all(sql);
   }
@@ -152,7 +142,7 @@ class Producto extends BaseModel {
   static async getReleatedProducts(category, id) {
     const sql = `SELECT p.*
     FROM ${this.tableName} p
-    WHERE p.categoria = ? AND p.id != ? AND p.stock > 0
+    WHERE p.categoria = ? AND p.id != ? 
     ORDER BY RANDOM()
     LIMIT 6;`;
     return await BaseModel.all(sql, [category, id]);
@@ -163,8 +153,7 @@ class Producto extends BaseModel {
     SELECT p.*, p2.nombre_empresa as proveedor_nombre 
     FROM ${this.tableName} p
     INNER JOIN proveedores p2 ON p.proveedor_id = p2.id
-    WHERE p.categoria = ?
-    ORDER BY p.stock DESC;
+    WHERE p.categoria = ?;
   `;
     return await BaseModel.all(sql, [category]);
   }
@@ -183,6 +172,55 @@ class Producto extends BaseModel {
   static async getCarousellPhotos() {
     const sql = `SELECT p.foto_producto,p.nombre,p.descripcion FROM productos p WHERE p.stock > ? ORDER BY RANDOM() LIMIT 5;`;
     return await BaseModel.all(sql, [0]);
+  }
+
+  /**
+   * Obtiene los últimos 5 productos agregados al sistema
+   * @returns {Promise<Array<Object>>} - Promesa que resuelve con los últimos 5 productos
+   */
+  static async getLatestProducts() {
+    const sql = `SELECT p.*, p2.nombre_empresa as proveedor_nombre 
+    FROM ${this.tableName} p
+    LEFT JOIN proveedores p2 ON p.proveedor_id = p2.id
+    ORDER BY p.id DESC LIMIT 5;`;
+    return await BaseModel.all(sql);
+  }
+
+  /**
+   * Obtiene los últimos 5 productos en oferta (precio menor al normal)
+   * @returns {Promise<Array<Object>>} - Promesa que resuelve con los productos en oferta
+   */
+  static async getProductsOnSale(limit) {
+    let sql;
+    if (limit !== 0) {
+      sql = `SELECT p.*, p2.nombre_empresa as proveedor_nombre 
+    FROM ${this.tableName} p
+    LEFT JOIN proveedores p2 ON p.proveedor_id = p2.id
+    WHERE p.descuento_porcentaje > 0
+    ORDER BY p.id DESC LIMIT ?;`;
+
+      return await BaseModel.all(sql, [limit]);
+    } else {
+      sql = `SELECT p.*, p2.nombre_empresa as proveedor_nombre 
+    FROM ${this.tableName} p
+    LEFT JOIN proveedores p2 ON p.proveedor_id = p2.id
+    WHERE p.descuento_porcentaje > 0
+    ORDER BY p.id DESC;`;
+
+      return await BaseModel.all(sql);
+    }
+  }
+
+  /**
+   * Obtiene estadísticas de categorías con la cantidad de productos por cada una
+   * @returns {Promise<Array<Object>>} - Promesa que resuelve con las estadísticas de categorías
+   */
+  static async getCategoryStats() {
+    const sql = `SELECT categoria, COUNT(*) as cantidad 
+    FROM ${this.tableName} 
+    GROUP BY categoria 
+    ORDER BY cantidad DESC;`;
+    return await BaseModel.all(sql);
   }
 }
 

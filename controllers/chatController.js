@@ -14,6 +14,8 @@ import { reportarIncidencia } from "./incidenciaController.js";
 import Soporte from "../models/Soporte.js";
 // importar el modelo de usuario
 import Usuario from "../models/Usuario.js";
+// importar el modelo de producto
+import Producto from "../models/Producto.js";
 
 // objeto para almacenar las sesiones de chat por id de usuario
 const userChatSessions = {};
@@ -58,34 +60,105 @@ const getChat = async (req, res) => {
 };
 
 /**
+ * Procesa las acciones relacionadas con productos en el mensaje
+ * @param {string} message - El mensaje del usuario
+ * @returns {Promise<string|null>} - La respuesta procesada o null si no hay acción
+ */
+async function processProductActions(message) {
+  // Buscar acciones en el formato ///accion///
+  const actionMatch = message.match(/\/\/([^/]+)\/\//);
+  if (!actionMatch) return null;
+
+  const action = actionMatch[1].trim();
+  let response = "";
+
+  try {
+    switch (action) {
+      case "buscar_ofertas":
+        const ofertas = await Producto.getProductsOnSale(5);
+        if (ofertas.length === 0) {
+          response = "No hay productos en oferta en este momento.";
+        } else {
+          response = "Últimos 5 productos en oferta:\n";
+          ofertas.forEach((prod) => {
+            response += `- ${prod.nombre}: $${
+              prod.precio * (1 - prod.descuento_porcentaje / 100)
+            } (${prod.descuento_porcentaje}% de descuento)\n`;
+          });
+        }
+        break;
+
+      case "categorias_disponibles":
+        const categorias = await Producto.getCategoryStats();
+        if (categorias.length === 0) {
+          response = "No hay categorías disponibles en este momento.";
+        } else {
+          response = "Categorías disponibles y cantidad de productos:\n";
+          categorias.forEach((cat) => {
+            response += `- ${cat.categoria}: ${cat.cantidad} productos\n`;
+          });
+        }
+        break;
+
+      case "ultimos_productos":
+        const ultimos = await Producto.getLatestProducts();
+        if (ultimos.length === 0) {
+          response = "No hay productos disponibles en este momento.";
+        } else {
+          response = "Últimos 5 productos agregados:\n";
+          ultimos.forEach((prod) => {
+            response += `- ${prod.nombre}: $${prod.precio}\n`;
+          });
+        }
+        break;
+
+      default:
+        return null;
+    }
+    return response;
+  } catch (error) {
+    console.error("Error procesando acción de producto:", error);
+    return "Lo siento, hubo un error al procesar tu solicitud.";
+  }
+}
+
+/**
  * handler para post /chat
  * recibe el prompt y el userid, gestiona la sesion del chat y genera la respuesta
  */
 const postChat = async (req, res) => {
   try {
-    // extraer userid y prompt del cuerpo de la peticion
     const { userId, prompt } = req.body;
-    // verificar si falta el userid
     if (!userId) {
       return res.status(400).json({
         error:
           "falta proporcionar el userid para mantener el contexto de la conversación.",
       });
     }
-    // verificar si falta el prompt
     if (!prompt) {
       return res.status(400).json({ error: "falta proporcionar el prompt." });
     }
 
-    // obtener o crear la sesion de chat para el usuario
+    // Primero intentar procesar acciones de productos
+    const productActionResponse = await processProductActions(prompt);
+    if (productActionResponse) {
+      return res.status(200).json({ answer: productActionResponse });
+    }
+
+    // Si no hay acción de producto, continuar con el flujo normal del chat
     let chatSession = userChatSessions[userId];
-    // si no existe una sesion de chat para el usuario
     if (!chatSession) {
-      // crear una nueva sesion de chat con la configuracion del bot
       chatSession = getOrCreateChatSession(
         [],
-        `eres "kadenas-bot", un asistente virtual de soporte especializado para la tienda online kadenas bikes. tu función es recopilar información de contacto y registrar incidencias relacionadas únicamente con la tienda o responder dudas acerca del correo de contacto de la empresa (kadenasbikes@gmail.com) o sus dueños. no debes responder ni desviar la conversación a temas sobre productos, promociones u otros asuntos no relacionados.
-        
+        `eres "kadenas-bot", un asistente virtual de soporte especializado para la tienda online kadenas bikes. tu función es recopilar información de contacto y registrar incidencias relacionadas únicamente con la tienda o responder dudas acerca del correo de contacto de la empresa (kadenasbikes@gmail.com) o sus dueños. además, puedes responder consultas sobre productos usando las siguientes acciones:
+
+acciones disponibles:
+- ///buscar_ofertas///: muestra los últimos 5 productos en oferta
+- ///categorias_disponibles///: muestra las categorías disponibles y la cantidad de productos en cada una
+- ///ultimos_productos///: muestra los últimos 5 productos agregados
+
+* Cuando el usuario haga alguna pregunta acerca de estas distintas acciones, tu responderar de esa forma, por ejemplo, si el usuario dice: 'dime las ultimas ofertas', tu generaras un mensaje asi: ///buscar_ofertas///, lo mismo con las otras dos acciones
+
 objetivo:
 - recoger la siguiente información del usuario:
   • nombre
@@ -105,6 +178,7 @@ restricciones:
 - responde únicamente sobre incidencias o datos de contacto relacionados con la tienda online kadenas bikes.
 - si el usuario introduce temas que no guarden relación con el soporte o las incidencias o preguntas acerca de la tienda, indícale amablemente que solo brindas ayuda sobre estas cuestiones.
 - tus respuestas no pueden ir con caracteres especiales o markdown.
+- si el usuario solicita información sobre productos, usa las acciones disponibles mencionadas arriba.
 
 tono y estilo:
 - sé siempre amable, profesional y directo.
@@ -133,9 +207,8 @@ si en algún momento se solicitan datos de contacto, como el correo de la empres
 - correo de la empresa: kadenasbikes@gmail.com
 - dueños: milton emmanuel rodríguez pérez, william paul macías vazquez, carlos antonio gonzalez gomez, cristopher acosta castañeda
 
-recuerda: solo atiende consultas sobre incidencias y datos de contacto referentes a kadenas bikes, o si se solicitan datos de contacto como el correo de la empresa o los dueños de la tienda.`
+recuerda: solo atiende consultas sobre incidencias, cuestiones sobre los productos acerca de las acciones que tienes disponibles (no le diras textualmente al usuario que puedes realizar eso, solo que puedes consultar algunos datos de los productos) y datos de contacto referentes a kadenas bikes, o si se solicitan datos de contacto como el correo de la empresa o los dueños de la tienda.`
       );
-      // almacenar la sesion de chat para el usuario
       userChatSessions[userId] = chatSession;
     }
 
@@ -200,6 +273,15 @@ recuerda: solo atiende consultas sobre incidencias y datos de contacto referente
           answer:
             "hubo un error al generar tu incidencia, inténtalo más tarde.",
         });
+      }
+    } else {
+      // Si no hay JSON, verificar si hay acciones de productos en la respuesta
+      const actionMatch = finalAnswer.match(/\/\/([^/]+)\/\//);
+      if (actionMatch) {
+        const actionResult = await processProductActions(finalAnswer);
+        if (actionResult) {
+          finalAnswer = actionResult;
+        }
       }
     }
 

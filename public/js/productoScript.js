@@ -79,6 +79,36 @@ if (btn_carrito) {
   });
 }
 
+const btn_comprar_ahora = document.getElementById("btn-comprar-ahora");
+
+if (btn_comprar_ahora) {
+  btn_comprar_ahora.addEventListener("click", async () => {
+    const id_producto = Number(btn_comprar_ahora.getAttribute("data-producto-id"));
+
+    try {
+      const response = await fetch(`/api/agregar-carrito/${id_producto}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        credentials: "same-origin",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
+      }
+
+      setTimeout(() => {
+        window.location = "/carrito";
+      }, 100);
+    } catch (err) {
+      console.error(err);
+      abrirModal("Error", "Sucedio un error al agregar al carrito");
+    }
+  });
+}
+
 // Toggle favoritos con cambio de icono y color naranja cuando está activo
 async function toggleFavorite() {
   const btn = document.getElementById("favorite-btn");

@@ -77,7 +77,15 @@ export const renderBusquedaPage = async (req, res) => {
     if (category) {
       // si la categoria es "todos", obtener todos los productos con join de proveedor
       if (category === "Todos") {
-        productosData = await Producto.allWithSupplierJoinForSearch();
+        productosData = await Producto.allWithSupplierJoin();
+        return res.render("busqueda", {
+          ...userData,
+          productos: productosData,
+        });
+      }
+
+      if (category === "Ofertas") {
+        productosData = await Producto.getProductsOnSale(0);
         return res.render("busqueda", {
           ...userData,
           productos: productosData,
@@ -276,13 +284,18 @@ export const renderAdminDashboard = async (req, res) => {
       return res.status(403).render("error", {
         error: {
           title: "Acceso denegado",
-          message: "Debes iniciar sesión como administrador para acceder a esta página.",
+          message:
+            "Debes iniciar sesión como administrador para acceder a esta página.",
         },
       });
     }
     // Obtener datos completos del usuario
     const userData = await getDataOfUser(req.user.id);
-    if (!userData.user || (userData.user.rol !== "administrador" && userData.user.rol !== "superadmin")) {
+    if (
+      !userData.user ||
+      (userData.user.rol !== "administrador" &&
+        userData.user.rol !== "superadmin")
+    ) {
       return res.status(403).render("error", {
         error: {
           title: "Acceso denegado",
